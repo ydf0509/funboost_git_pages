@@ -1,0 +1,398 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<base href="https://lezre3dsj3com.ok.kimi.link">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FunBoost 最简单Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            white-space: pre;
+            display: block;
+        }
+
+        /* Python语法高亮 */
+        .code-block code .keyword { color: #0000ff; font-weight: bold; }
+        .code-block code .string { color: #008000; }
+        .code-block code .comment { color: #808080; font-style: italic; }
+        .code-block code .function { color: #795da3; }
+        .code-block code .number { color: #098658; }
+        .code-block code .decorator { color: #d73a49; }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            border-left: 4px solid #3498db;
+        }
+
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .demo-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .demo-list li {
+            background: #ecf0f1;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .demo-list li strong {
+            color: #2c3e50;
+        }
+
+        .demo-list li code {
+            background: #bdc3c7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .highlight strong {
+            color: #856404;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .footer p {
+            margin: 10px 0;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #2980b9;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin: 2px;
+        }
+
+        .media-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .media-player {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .media-player h3 {
+            display: flex;
+            align-items: center;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .media-player h3 svg {
+            margin-right: 10px;
+        }
+
+        video,
+        audio {
+            width: 100%;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        /* 自定义视频/音频播放器皮肤 */
+        video::-webkit-media-controls-panel, audio::-webkit-media-controls-panel {
+            background-color: rgba(44, 62, 80, 0.8);
+            border-radius: 8px;
+        }
+
+        video::-webkit-media-controls-play-button, audio::-webkit-media-controls-play-button {
+            background-color: #3498db;
+            border-radius: 50%;
+        }
+
+        video::-webkit-media-controls-play-button:hover, audio::-webkit-media-controls-play-button:hover {
+            background-color: #2980b9;
+        }
+
+        video::-webkit-media-controls-timeline, audio::-webkit-media-controls-timeline {
+            background-color: #95a5a6;
+            border-radius: 2px;
+        }
+
+        video::-webkit-media-controls-current-time-display, video::-webkit-media-controls-time-remaining-display,
+        audio::-webkit-media-controls-current-time-display, audio::-webkit-media-controls-time-remaining-display {
+            color: #ecf0f1;
+            font-size: 14px;
+        }
+
+        video::-webkit-media-controls-volume-slider, audio::-webkit-media-controls-volume-slider {
+            background-color: #95a5a6;
+            border-radius: 2px;
+        }
+
+    </style>
+<script src="https://statics.moonshot.cn/sdk/preview-widgets.min.js" defer=""></script></head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 FunBoost 最简单Demo</h1>
+            <p>Python分布式函数调度框架 - 只需一个@boost装饰器</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>🎯 什么是FunBoost？</h2>
+                <p>FunBoost是一个<strong>万能、强大、简单、自由</strong>的Python全功能分布式调度框架。它的作用是给用户任意项目的任意函数赋能，让你的函数具备分布式执行能力。</p>
+
+                <div class="highlight">
+                    <strong>核心优势：</strong> 只需要一个<code>@boost</code>装饰器，就能让任意函数实现分布式调度，无需修改原有代码结构。
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>✨ 核心特性</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>🎯 简单易用</h3>
+                        <p>只需一个@boost装饰器，无需复杂配置，学习成本低</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔄 分布式支持</h3>
+                        <p>支持40+种消息队列中间件，包括Redis、RabbitMQ、Kafka等</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>⚡ 高性能</h3>
+                        <p>发布性能是Celery的22倍，消费性能是46倍</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎛️ 功能丰富</h3>
+                        <p>QPS控制、任务过滤、重试机制、RPC调用、定时任务等</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>👁️ 可视化界面</h3>
+                        <p>内置Web管理界面，实时监控任务状态</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔧 零侵入性</h3>
+                        <p>不改变原有代码结构，随时添加或移除装饰器</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🚀 最简示例</h2>
+                <p>下面是最简单的FunBoost使用示例：</p>
+
+                <pre class="code-block"><code>from funboost import boost, BrokerEnum, BoosterParams
+import time
+
+# 只需一个@boost装饰器，函数就具备了分布式调度能力
+@boost(BoosterParams(
+    queue_name="simple_queue",
+    broker_kind=BrokerEnum.MEMORY_QUEUE,  # 使用内存队列
+    qps=3,  # 每秒执行3次
+))
+def add_task(x, y):
+    print(f"开始计算: {x} + {y}")
+    time.sleep(1)  # 模拟耗时操作
+    result = x + y
+    print(f"计算完成: {x} + {y} = {result}")
+    return result
+
+if __name__ == "__main__":
+    # 发布任务
+    for i in range(5):
+        add_task.push(i, i * 2)
+
+    # 启动消费者处理任务
+    add_task.consume()
+                </code></pre>
+            </div>
+
+
+
+            <div class="section">
+                <h2>🛠️ 安装要求</h2>
+                <pre class="code-block"><code># 安装FunBoost
+pip install funboost
+                </code></pre>
+            </div>
+
+            <div class="section">
+                <h2>🏷️ 支持的中间件</h2>
+                <p>
+                    <span class="tag">Redis</span>
+                    <span class="tag">RabbitMQ</span>
+                    <span class="tag">Kafka</span>
+                    <span class="tag">NSQ</span>
+                    <span class="tag">SQLite</span>
+                    <span class="tag">MongoDB</span>
+                    <span class="tag">Celery</span>
+                    <span class="tag">Memory Queue</span>
+                    <span class="tag">40+种中间件</span>
+                </p>
+            </div>
+
+            <div class="section">
+                <h2>📊 性能对比</h2>
+                <pre class="code-block"><code>框架对比：
+- FunBoost: 发布性能 100%, 消费性能 100%
+- Celery: 发布性能 4.5%, 消费性能 2.2%
+
+结论：FunBoost性能是Celery的20-40倍！！
+                </code></pre>
+            </div>
+
+            <div class="section">
+                <h2>📺  音视频讲解</h2>
+                <div class="media-container">
+                    <div class="media-player">
+                        <h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-9 5.5V4.5L15 10z"/><path d="M2 3.5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-17z"/></svg>
+                            观看 Funboost 视频讲解
+                        </h3>
+                        <video controls src="https://raw.githubusercontent.com/ydf0509/funboost_git_pages/refs/heads/main/%E8%A7%86%E9%A2%91-Funboost_%E8%A7%86%E9%A2%91.mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                    </div>
+                    <div class="media-player">
+                        <h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                            收听 Funboost 音频讲解
+                        </h3>
+                        <audio controls src="https://raw.githubusercontent.com/ydf0509/funboost_git_pages/refs/heads/main/音频-funboost_音频.mp4">
+                            您的浏览器不支持音频播放 。 
+                        </audio>
+                    </div>
+                </div>
+            </div>
+
+          </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
