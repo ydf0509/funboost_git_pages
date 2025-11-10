@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funboost - 为 Python 函数装上超音速引擎</title>
+    <style>
+        :root {
+            --bg-color: #111827;
+            --card-bg: #1f2937;
+            --text-color: #d1d5db;
+            --title-color: #ffffff;
+            --accent-color: #38bdf8;
+            --accent-hover: #7dd3fc;
+            --green-color: #34d399;
+            --red-color: #f87171;
+            --code-bg: #000;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Header / Hero Section --- */
+        .hero {
+            text-align: center;
+            padding: 120px 0 100px;
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0) 0%, #111827 100%), radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.15) 0%, rgba(56, 189, 248, 0) 40%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--title-color);
+            letter-spacing: -0.05em;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #a5b4fc, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-flow 5s ease-in-out infinite;
+            background-size: 200% auto;
+        }
+
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero p.subtitle {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: #9ca3af;
+        }
+
+        .hero .cta-buttons a {
+            display: inline-block;
+            padding: 14px 28px;
+            margin: 0 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .hero .cta-primary {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+        .hero .cta-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.2);
+        }
+
+        .hero .cta-secondary {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+        .hero .cta-secondary:hover {
+            background-color: rgba(56, 189, 248, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* --- Section Styling --- */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--title-color);
+            margin: 0 0 10px;
+        }
+        
+        .section-header h2 span {
+            background: linear-gradient(90deg, var(--accent-color), var(--green-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* --- Code Block Styling --- */
+        .code-block {
+            background-color: var(--code-bg);
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .code-block code {
+            white-space: pre;
+        }
+        
+        .code-keyword { color: #c792ea; }
+        .code-function { color: #82aaff; }
+        .code-string { color: #c3e88d; }
+        .code-number { color: #f78c6c; }
+        .code-comment { color: #546e7a; }
+        .code-decorator { color: #ffcb6b; }
+        .code-class { color: #ffcb6b; }
+
+
+        /* --- The Magic Section --- */
+        .magic-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+        .magic-comparison h3 {
+            color: var(--title-color);
+            border-bottom: 2px solid var(--card-bg);
+            padding-bottom: 10px;
+        }
+
+        /* --- Features Section --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+        .feature-card .icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+        .feature-card h3 {
+            font-size: 1.25rem;
+            color: var(--title-color);
+            margin: 0 0 10px;
+        }
+
+        /* --- Comparison Tables --- */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #374151;
+            padding: 15px;
+            text-align: left;
+        }
+        .comparison-table thead {
+            background-color: var(--card-bg);
+        }
+        .comparison-table thead th {
+            font-size: 1.1rem;
+            color: var(--title-color);
+        }
+        .comparison-table .advantage {
+            background-color: rgba(52, 211, 153, 0.1);
+            border-left: 3px solid var(--green-color);
+        }
+        .comparison-table .disadvantage {
+            background-color: rgba(248, 113, 113, 0.1);
+            border-left: 3px solid var(--red-color);
+        }
+        .comparison-table .advantage strong { color: var(--green-color); }
+        .comparison-table .disadvantage strong { color: var(--red-color); }
+
+        /* --- Broker Section --- */
+        .broker-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .broker-item {
+            background: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid #374151;
+            white-space: nowrap;
+        }
+        
+        /* --- Gallery Section --- */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .gallery-item img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #374151;
+            transition: transform 0.3s ease;
+        }
+        .gallery-item img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            margin-top: 60px;
+            border-top: 1px solid #374151;
+        }
+        footer p {
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p.subtitle { font-size: 1.1rem; }
+            .section-header h2 { font-size: 2rem; }
+            .magic-comparison, .gallery { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="container">
+            <h1>Funboost: 为 Python 函数装上超音速引擎</h1>
+            <p class="subtitle">
+                一个万能、强大、简单、自由的 Python 全功能分布式函数调度框架。只需一行 <code>@boost</code> 装饰器，即可为您的任意函数赋予分布式、高并发、高可靠的强大能力。
+            </p>
+            <div class="cta-buttons">
+                <a href="#quick-start" class="cta-primary">🚀 快速上手</a>
+                <a href="https://funboost.readthedocs.io/zh-cn/latest/" target="_blank" class="cta-secondary">📖 阅读文档</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="the-magic">
+            <div class="container">
+                <div class="section-header">
+                    <h2>一行代码的魔法：从繁琐到优雅</h2>
+                    <p>告别手写线程池与多进程的痛苦。Funboost 将复杂的并发与分布式逻辑，浓缩于一行装饰器之中。</p>
+                </div>
+                <div class="magic-comparison">
+                    <div>
+                        <h3>😭 传统方式：手动管理并发</h3>
+                        <div class="code-block"><code><span class="code-keyword">import</span> time
+<span class="code-keyword">from</span> concurrent.futures <span class="code-keyword">import</span> <span class="code-class">ThreadPoolExecutor</span>
+
+<span class="code-keyword">def</span> <span class="code-function">task_fun</span>(x):
+    time.sleep(<span class="code-number">3</span>)
+    <span class="code-function">print</span>(x)
+
+pool = <span class="code-class">ThreadPoolExecutor</span>(<span class="code-number">10</span>)
+
+<span class="code-keyword">if</span> __name__ == <span class="code-string">'__main__'</span>:
+    <span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">100</span>):
+        pool.submit(task_fun, i)
+</code></div>
+                    </div>
+                    <div>
+                        <h3>😎 Funboost 方式：一行 <code>@boost</code> 搞定</h3>
+                        <div class="code-block"><code><span class="code-keyword">import</span> time
+<span class="code-keyword">from</span> funboost <span class="code-keyword">import</span> boost, <span class="code-class">BrokerEnum</span>, <span class="code-class">BoosterParams</span>
+
+<span class="code-decorator">@boost</span>(<span class="code-class">BoosterParams</span>(queue_name=<span class="code-string">"my_queue"</span>, 
+                 broker_kind=<span class="code-class">BrokerEnum</span>.MEMORY_QUEUE,
+                 concurrent_num=<span class="code-number">10</span>))
+<span class="code-keyword">def</span> <span class="code-function">task_fun</span>(x):
+    time.sleep(<span class="code-number">3</span>)
+    <span class="code-function">print</span>(x)
+
+<span class="code-keyword">if</span> __name__ == <span class="code-string">'__main__'</span>:
+    <span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">100</span>):
+        task_fun.push(i)  <span class="code-comment"># 发布任务</span>
+    task_fun.consume()  <span class="code-comment"># 启动消费</span>
+</code></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" style="background-color: var(--card-bg);">
+            <div class="container">
+                <div class="section-header">
+                    <h2>重量级功能，<span>轻量级体验</span></h2>
+                    <p>Funboost 将分布式系统的核心能力，以最简单、最直接的方式，赋予每一个普通的 Python 开发者。</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        <h3>极致性能</h3>
+                        <p>发布性能是 Celery 的 <strong>22倍</strong>，消费性能是 Celery 的 <strong>46倍</strong>。性能断崖式领先，不在一个数量级。</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <h3>万物皆可为 Broker</h3>
+                        <p>支持 <strong>40+</strong> 种消息队列，包括 RabbitMQ, Kafka, Redis, NSQ, 数据库, 文件, 内存队列，甚至 Celery 本身。</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <h3>精准 QPS 控频</h3>
+                        <p>像拧水龙头一样精确控制函数执行频率，支持分布式全局控频，精度高达 99.9%，远超 Celery。</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                        <h3>万无一失的高可靠性</h3>
+                        <p>内置消费确认(ACK)、自动重试、死信队列(DLQ)。即使服务器断电，正在运行的任务也一个都不会丢。</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                        <h3>全能并发模型</h3>
+                        <p>支持多线程、协程(gevent/eventlet/asyncio)，更能叠加多进程，轻松榨干多核 CPU，突破 GIL 限制。</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" /></svg>
+                        <h3>零侵入 & 绝对自由</h3>
+                        <p>不强迫你改变项目结构或编程习惯。你的函数还是你的，Funboost 只是给它赋能，随时能用，随时能走。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vs-celery">
+            <div class="container">
+                <div class="section-header">
+                    <h2>巅峰对决：Funboost vs Celery</h2>
+                    <p>这不是重复造轮子，这是重新定义轮子。Funboost 在性能、易用性、功能广度上全面超越。</p>
+                </div>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>维度</th>
+                            <th>✅ Funboost (传奇王者)</th>
+                            <th>❌ Celery (荣耀黄金)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>性能</strong></td>
+                            <td class="advantage"><strong>发布快22倍，消费快46倍</strong>。断崖式领先。</td>
+                            <td class="disadvantage">性能瓶颈明显，被 Kombu 和自身复杂调用链拖累。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>易用性</strong></td>
+                            <td class="advantage"><strong>一行 <code>@boost</code></strong>，无需固定目录，无需命令行。</td>
+                            <td class="disadvantage">配置极其复杂，任务路由反直觉，命令行繁琐。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IDE 支持</strong></td>
+                            <td class="advantage"><strong>全面自动补全</strong>。所有 API 和参数清晰可见。</td>
+                            <td class="disadvantage">几乎为零，在“黑暗中”编码，极易出错。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>并发模型</strong></td>
+                            <td class="advantage"><strong>多进程 + 线程/协程</strong> 叠加，性能炸裂。</td>
+                            <td class="disadvantage">多进程和线程/协程互斥，无法叠加。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Broker 支持</strong></td>
+                            <td class="advantage"><strong>40+ 种</strong>，万物皆可为 Broker，包括 Celery 本身。</td>
+                            <td class="disadvantage">种类较少，且不支持 Kafka, NSQ, Pulsar 等。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Asyncio 支持</strong></td>
+                            <td class="advantage"><strong>原生全流程支持</strong>，包括异步消费、发布和获取结果。</td>
+                            <td class="disadvantage">不支持直接调度 `async def` 函数，生态割裂。</td>
+                        </tr>
+                    </tbody>
+                </table>
+                 <div class="code-block" style="text-align:center; font-style:italic; font-size:1.1rem; line-height:2; padding:30px; color: #ffcb6b; border-color: #ffcb6b;">
+                    "旧王 Celery 骸骨已寒，新皇 Funboost 旭日灼天！<br>
+                    以 @boost 为传国玉玺，以分布式为定鼎九器——<br>
+                    万物皆可调度，四海终归一统！"
+                </div>
+            </div>
+        </section>
+        
+        <section id="vs-scrapy" style="background-color: var(--card-bg);">
+            <div class="container">
+                <div class="section-header">
+                    <h2>降维打击：Funboost vs Scrapy</h2>
+                    <p>Scrapy 是 URL 调度器，Funboost 是函数调度器。前者束缚你，后者赋能你。</p>
+                </div>
+                <div class="magic-comparison">
+                    <div>
+                        <h3>❌ Scrapy：框架奴役与回调地狱</h3>
+                        <div class="code-block"><code><span class="code-comment"># 必须继承 Spider, 逻辑被拆分</span>
+<span class="code-keyword">class</span> <span class="code-class">MySpider</span>(<span class="code-class">scrapy.Spider</span>):
+    <span class="code-keyword">def</span> <span class="code-function">parse</span>(self, response):
+        <span class="code-comment"># 逻辑割裂，状态需用 meta 传递</span>
+        <span class="code-keyword">for</span> url <span class="code-keyword">in</span> response.css(<span class="code-string">'a::attr(href)'</span>):
+            <span class="code-keyword">yield</span> <span class="code-class">Request</span>(url, callback=self.parse_detail)
+            
+    <span class="code-keyword">def</span> <span class="code-function">parse_detail</span>(self, response):
+        <span class="code-comment"># 数据需用 yield item 提交给 Pipeline</span>
+        item = ...
+        <span class="code-keyword">yield</span> item</code></div>
+                    </div>
+                    <div>
+                        <h3>✅ Funboost/boost_spider：自由编程</h3>
+                        <div class="code-block"><code><span class="code-comment"># 只是一个普通函数</span>
+<span class="code-decorator">@boost</span>(<span class="code-class">BoosterParams</span>(queue_name=<span class="code-string">"list_page"</span>))
+<span class="code-keyword">def</span> <span class="code-function">crawl_list</span>(url):
+    resp = requests.get(url) <span class="code-comment"># 自由选择请求库</span>
+    <span class="code-keyword">for</span> detail_url <span class="code-keyword">in</span> parse_urls(resp.text):
+        crawl_detail.push(detail_url) <span class="code-comment"># 直接派发新任务</span>
+
+<span class="code-decorator">@boost</span>(<span class="code-class">BoosterParams</span>(queue_name=<span class="code-string">"detail_page"</span>))
+<span class="code-keyword">def</span> <span class="code-function">crawl_detail</span>(url):
+    resp = requests.get(url)
+    item = parse_item(resp.text)
+    save_to_db(item) <span class="code-comment"># 直接保存数据</span></code></div>
+                    </div>
+                </div>
+                <table class="comparison-table">
+                    <thead><tr><th>维度</th><th>✅ Funboost/boost_spider</th><th>❌ Scrapy</th></tr></thead>
+                    <tbody>
+                         <tr><td><strong>核心理念</strong></td><td class="advantage"><strong>函数调度</strong>，逻辑统一，平铺直叙。</td><td class="disadvantage"><strong>URL调度</strong>，回调地狱，逻辑割裂。</td></tr>
+                         <tr><td><strong>可靠性</strong></td><td class="advantage"><strong>ACK机制</strong>，断电重启任务不丢失。</td><td class="disadvantage">`blpop` 机制，重启或崩溃会**永久丢失**大量任务。</td></tr>
+                         <tr><td><strong>反爬定制</strong></td><td class="advantage"><strong>极其简单</strong>，封装普通Python函数即可。</td><td class="disadvantage"><strong>极其复杂</strong>，必须编写和注册下载器中间件。</td></tr>
+                         <tr><td><strong>自由度</strong></td><td class="advantage"><strong>无限</strong>，可使用任何第三方库。</td><td class="disadvantage"><strong>受限</strong>，被框架的生命周期和组件束缚。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="brokers">
+            <div class="container">
+                <div class="section-header">
+                    <h2>支持 40+ 种消息队列</h2>
+                    <p>Funboost 实现了真正的“万物皆可为 Broker”，提供无与伦比的灵活性。</p>
+                </div>
+                <div class="broker-list">
+                    <span class="broker-item">RabbitMQ</span>
+                    <span class="broker-item">Kafka</span>
+                    <span class="broker-item">Redis (List, Stream, PubSub)</span>
+                    <span class="broker-item">NSQ</span>
+                    <span class="broker-item">Pulsar</span>
+                    <span class="broker-item">RocketMQ</span>
+                    <span class="broker-item">MQTT</span>
+                    <span class="broker-item">NATS</span>
+                    <span class="broker-item">ZeroMQ</span>
+                    <span class="broker-item">MongoDB</span>
+                    <span class="broker-item">SQLAlchemy</span>
+                    <span class="broker-item">Peewee</span>
+                    <span class="broker-item">SQLite</span>
+                    <span class="broker-item">MemoryQueue</span>
+                    <span class="broker-item">文件队列</span>
+                    <span class="broker-item">HTTP / TCP / UDP</span>
+                    <span class="broker-item">gRPC</span>
+                    <span class="broker-item">MySQL CDC (Binlog)</span>
+                    <span class="broker-item">Celery (as broker)</span>
+                    <span class="broker-item">Dramatiq (as broker)</span>
+                    <span class="broker-item">RQ (as broker)</span>
+                    <span class="broker-item">... and more</span>
+                </div>
+            </div>
+        </section>
+        
+        <section id="gallery" style="background-color: var(--card-bg);">
+            <div class="container">
+                <div class="section-header">
+                    <h2>强大的可视化管理后台</h2>
+                    <p>开箱即用的 Funboost Web Manager，实时监控、管理和操作您的所有任务。</p>
+                </div>
+                <div class="gallery">
+                    <div class="gallery-item"><img src="https://s21.ax1x.com/2025/03/04/pEJCffK.png" alt="函数消费结果"></div>
+                    <div class="gallery-item"><img src="https://s21.ax1x.com/2025/03/04/pEJCWY6.png" alt="消费速度图"></div>
+                    <div class="gallery-item"><img src="https://s21.ax1x.com/2025/05/27/pVSOJcq.png" alt="队列操作"></div>
+                    <div class="gallery-item"><img src="https://s21.ax1x.com/2025/04/29/pE7y8oT.png" alt="RPC调用"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quick-start">
+            <div class="container">
+                <div class="section-header">
+                    <h2>即刻开始，为函数赋能</h2>
+                    <p>只需两步，即可体验 Funboost 带来的开发效率革命。</p>
+                </div>
+                <h3>1. 安装 Funboost</h3>
+                <div class="code-block"><code>pip install funboost --upgrade
+<span class="code-comment"># 或者安装所有可选依赖</span>
+pip install funboost[all]</code></div>
+                
+                <h3>2. 编写您的第一个分布式函数</h3>
+                <div class="code-block"><code><span class="code-keyword">import</span> time
+<span class="code-keyword">from</span> funboost <span class="code-keyword">import</span> boost, <span class="code-class">BrokerEnum</span>, <span class="code-class">BoosterParams</span>
+
+<span class="code-comment"># 1. 为你的函数加上 @boost 装饰器</span>
+<span class="code-decorator">@boost</span>(<span class="code-class">BoosterParams</span>(queue_name=<span class="code-string">"hello_queue"</span>, qps=<span class="code-number">5</span>))
+<span class="code-keyword">def</span> <span class="code-function">say_hello</span>(name: <span class="code-class">str</span>):
+    <span class="code-function">print</span>(<span class="code-string">f"Hello, </span>{name}<span class="code-string">!"</span>)
+    time.sleep(<span class="code-number">1</span>)
+
+<span class="code-keyword">if</span> __name__ == <span class="code-string">"__main__"</span>:
+    <span class="code-comment"># 2. 发布任务并启动消费</span>
+    <span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">50</span>):
+        say_hello.push(name=<span class="code-string">f"Funboost User </span>{i}<span class="code-string">"</span>)
+    
+    say_hello.consume()
+</code></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <h2>停止被框架奴役，开始为函数赋能。</h2>
+            <p>
+                <a href="https://github.com/ydf0509/funboost" target="_blank" style="color:var(--accent-color); margin: 0 10px;">GitHub</a> |
+                <a href="https://funboost.readthedocs.io/zh-cn/latest/" target="_blank" style="color:var(--accent-color); margin: 0 10px;">官方文档</a>
+            </p>
+            <p>&copy; Funboost - 重新定义 Python 分布式函数调度</p>
+        </div>
+    </footer>
+
+</body>
+</html>
