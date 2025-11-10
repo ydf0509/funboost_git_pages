@@ -478,7 +478,7 @@ pool = <span class="code-class">ThreadPoolExecutor</span>(<span class="code-numb
                     <thead><tr><th>维度</th><th>✅ Funboost/boost_spider</th><th>❌ Scrapy</th></tr></thead>
                     <tbody>
                          <tr><td><strong>核心理念</strong></td><td class="advantage"><strong>函数调度</strong>，逻辑统一，平铺直叙。</td><td class="disadvantage"><strong>URL调度</strong>，回调地狱，逻辑割裂。</td></tr>
-                         <tr><td><strong>可靠性</strong></td><td class="advantage"><strong>ACK机制</strong>，断电重启任务不丢失。</td><td class="disadvantage">`blpop` 机制，重启或崩溃会**永久丢失**大量任务。</td></tr>
+                         <tr><td><strong>可靠性</strong></td><td class="advantage"><strong>ACK机制</strong>，断电重启任务不丢失。</td><td class="disadvantage"><strong>blpop 机制</strong>，重启或崩溃会<strong>永久丢失</strong>大量任务。</td></tr>
                          <tr><td><strong>反爬定制</strong></td><td class="advantage"><strong>极其简单</strong>，封装普通Python函数即可。</td><td class="disadvantage"><strong>极其复杂</strong>，必须编写和注册下载器中间件。</td></tr>
                          <tr><td><strong>自由度</strong></td><td class="advantage"><strong>无限</strong>，可使用任何第三方库。</td><td class="disadvantage"><strong>受限</strong>，被框架的生命周期和组件束缚。</td></tr>
                     </tbody>
