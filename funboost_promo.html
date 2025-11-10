@@ -50,6 +50,7 @@
             letter-spacing: -0.05em;
             margin-bottom: 20px;
             background: linear-gradient(90deg, #a5b4fc, #38bdf8, #818cf8);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: gradient-flow 5s ease-in-out infinite;
@@ -119,6 +120,7 @@
         
         .section-header h2 span {
             background: linear-gradient(90deg, var(--accent-color), var(--green-color));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -271,12 +273,155 @@
             color: #9ca3af;
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: var(--bg-color);
+            margin: 3% auto;
+            padding: 0;
+            border: 1px solid #374151;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideDown 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 30px 40px;
+            border-bottom: 1px solid #374151;
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-color);
+            z-index: 10;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--title-color);
+            font-size: 2rem;
+            background: linear-gradient(90deg, var(--accent-color), var(--green-color));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-header p {
+            margin: 10px 0 0;
+            color: #9ca3af;
+        }
+
+        .modal-body {
+            padding: 40px;
+        }
+
+        .modal-body h3 {
+            color: var(--title-color);
+            font-size: 1.4rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .modal-body h3:first-child {
+            margin-top: 0;
+        }
+
+        .modal-body .code-block {
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            opacity: 0.8;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .copy-btn.copied {
+            background-color: var(--green-color);
+        }
+
+        .close {
+            color: #9ca3af;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: var(--accent-color);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .hero p.subtitle { font-size: 1.1rem; }
             .section-header h2 { font-size: 2rem; }
             .magic-comparison, .gallery { grid-template-columns: 1fr; }
+            
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+                max-height: 90vh;
+            }
+            
+            .modal-header {
+                padding: 20px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -289,7 +434,7 @@
                 一个万能、强大、简单、自由的 Python 全功能分布式函数调度框架。只需一行 <code>@boost</code> 装饰器，即可为您的任意函数赋予分布式、高并发、高可靠的强大能力。
             </p>
             <div class="cta-buttons">
-                <a href="#quick-start" class="cta-primary">🚀 快速上手</a>
+                <a href="javascript:void(0);" id="quickStartBtn" class="cta-primary">🚀 快速上手</a>
                 <a href="https://funboost.readthedocs.io/zh-cn/latest/" target="_blank" class="cta-secondary">📖 阅读文档</a>
             </div>
         </div>
@@ -534,7 +679,8 @@ pool = <span class="code-class">ThreadPoolExecutor</span>(<span class="code-numb
             </div>
         </section>
 
-        <section id="quick-start">
+        <!-- Quick Start section is now in the modal -->
+        <section id="quick-start" style="display: none;">
             <div class="container">
                 <div class="section-header">
                     <h2>即刻开始，为函数赋能</h2>
@@ -576,6 +722,106 @@ pip install funboost[all]</code></div>
             <p>&copy; Funboost - 重新定义 Python 分布式函数调度</p>
         </div>
     </footer>
+
+    <!-- Quick Start Modal -->
+    <div id="quickStartModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>即刻开始，为函数赋能</h2>
+                <p>只需两步，即可体验 Funboost 带来的开发效率革命。</p>
+            </div>
+            <div class="modal-body">
+                <h3>1. 安装 Funboost</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this, 'code1')">📋 复制</button>
+                    <code id="code1">pip install funboost --upgrade
+<span class="code-comment"># 或者安装所有可选依赖</span>
+pip install funboost[all]</code></div>
+                
+                <h3>2. 编写您的第一个分布式函数</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this, 'code2')">📋 复制</button>
+                    <code id="code2"><span class="code-keyword">import</span> time
+<span class="code-keyword">from</span> funboost <span class="code-keyword">import</span> boost, <span class="code-class">BrokerEnum</span>, <span class="code-class">BoosterParams</span>
+
+<span class="code-comment"># 1. 为你的函数加上 @boost 装饰器</span>
+<span class="code-decorator">@boost</span>(<span class="code-class">BoosterParams</span>(queue_name=<span class="code-string">"hello_queue"</span>, qps=<span class="code-number">5</span>))
+<span class="code-keyword">def</span> <span class="code-function">say_hello</span>(name: <span class="code-class">str</span>):
+    <span class="code-function">print</span>(<span class="code-string">f"Hello, </span>{name}<span class="code-string">!"</span>)
+    time.sleep(<span class="code-number">1</span>)
+
+<span class="code-keyword">if</span> __name__ == <span class="code-string">"__main__"</span>:
+    <span class="code-comment"># 2. 发布任务并启动消费</span>
+    <span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">50</span>):
+        say_hello.push(name=<span class="code-string">f"Funboost User </span>{i}<span class="code-string">"</span>)
+    
+    say_hello.consume()
+</code></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get modal elements
+        var modal = document.getElementById("quickStartModal");
+        var btn = document.getElementById("quickStartBtn");
+        var span = document.getElementsByClassName("close")[0];
+
+        // Open modal when button is clicked
+        btn.onclick = function() {
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden"; // Prevent background scrolling
+        }
+
+        // Close modal when X is clicked
+        span.onclick = function() {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape" && modal.style.display === "block") {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        });
+
+        // Copy code function
+        function copyCode(button, codeId) {
+            var codeElement = document.getElementById(codeId);
+            var textToCopy = codeElement.textContent || codeElement.innerText;
+            
+            // Use the Clipboard API
+            navigator.clipboard.writeText(textToCopy).then(function() {
+                // Change button text and style
+                var originalText = button.innerHTML;
+                button.innerHTML = '✓ 已复制';
+                button.classList.add('copied');
+                
+                // Reset after 2 seconds
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('复制失败:', err);
+                button.innerHTML = '✗ 复制失败';
+                setTimeout(function() {
+                    button.innerHTML = '📋 复制';
+                }, 2000);
+            });
+        }
+    </script>
 
 </body>
 </html>
